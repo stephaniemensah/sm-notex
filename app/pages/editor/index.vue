@@ -1,19 +1,22 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <div class="max-w-4xl mx-auto px-4 py-6">
-      <div class="flex items-center justify-between mb-6">
-        <NuxtLink to="/notes" class="text-sm text-gray-500 hover:text-gray-700">
-          Back to Notes
-        </NuxtLink>
-        <button
-          v-if="isEditing"
-          class="text-sm text-red-500 hover:text-red-700 font-medium"
-          @click="handleDelete"
-        >
-          Delete
-        </button>
-      </div>
+  <div class="h-screen flex flex-col bg-white">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <NuxtLink to="/notes" class="text-[17px] text-blue-500 font-medium active:scale-95 transition-all">
+        <svg class="w-5 h-5 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+        Notes
+      </NuxtLink>
+      <button
+        v-if="isEditing"
+        class="text-[15px] text-red-500 font-medium active:scale-95 transition-all"
+        @click="handleDelete"
+      >
+        Delete
+      </button>
+    </div>
 
+    <div class="flex-1 overflow-y-auto">
       <RichTextEditor
         :initial-content="initialContent"
         @update="handleUpdate"

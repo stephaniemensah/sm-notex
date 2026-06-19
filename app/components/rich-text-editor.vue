@@ -1,55 +1,64 @@
 <template>
-  <div>
-    <div v-if="editor" class="flex flex-wrap items-center gap-1 border border-gray-200 rounded-t-lg px-3 py-2 bg-gray-50">
+  <div class="flex flex-col h-full">
+    <div v-if="editor" class="flex items-center gap-0.5 px-3 py-2.5 border-b border-gray-100 overflow-x-auto flex-shrink-0">
       <button
         v-for="action in formattingActions"
         :key="action.label"
         :title="action.label"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
-        :class="{ 'bg-gray-200 text-blue-600': action.isActive?.() }"
+        class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[13px] font-semibold transition-all duration-150"
+        :class="action.isActive?.() ? 'bg-blue-50 text-blue-500' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'"
         @click="action.command"
       >
-        <span class="text-sm font-medium" v-html="action.icon"></span>
+        {{ action.icon }}
       </button>
 
-      <div class="w-px h-5 bg-gray-300 mx-1"></div>
+      <div class="w-px h-5 bg-gray-200 mx-1 flex-shrink-0"></div>
 
       <button
         title="Insert Link"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all duration-150"
         @click="insertLink"
       >
-        <span class="text-sm font-medium">Link</span>
+        <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+        </svg>
       </button>
 
       <button
         title="Insert Image"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all duration-150"
         @click="insertImage"
       >
-        <span class="text-sm font-medium">Image</span>
+        <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+        </svg>
       </button>
 
       <button
         title="Embed YouTube"
-        class="p-1.5 rounded hover:bg-gray-200 transition-colors"
+        class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all duration-150"
         @click="insertYoutube"
       >
-        <span class="text-sm font-medium">YT</span>
+        <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+        </svg>
       </button>
 
-      <div class="w-px h-5 bg-gray-300 mx-1"></div>
+      <div class="w-px h-5 bg-gray-200 mx-1 flex-shrink-0"></div>
 
       <button
         title="AI Assistant"
-        class="p-1.5 rounded hover:bg-blue-100 text-blue-600 transition-colors font-semibold"
+        class="flex-shrink-0 h-9 px-3 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-semibold bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-600 hover:to-purple-600 active:scale-95 transition-all duration-150 shadow-sm shadow-purple-500/20"
         @click="handleAi"
       >
-        <span class="text-sm">AI</span>
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+        </svg>
+        AI
       </button>
     </div>
 
-    <EditorContent :editor="editor" class="prose prose-sm max-w-none border border-t-0 border-gray-200 rounded-b-lg p-4 min-h-[400px] focus:outline-none" />
+    <EditorContent :editor="editor" class="flex-1 overflow-y-auto prose prose-sm max-w-none p-6 focus:outline-none" />
   </div>
 </template>
 
@@ -103,9 +112,9 @@ const formattingActions = computed(() => {
     { label: 'Heading 2', icon: 'H2', isActive: () => e.isActive('heading', { level: 2 }), command: () => e.chain().focus().toggleHeading({ level: 2 }).run() },
     { label: 'Bullet List', icon: 'UL', isActive: () => e.isActive('bulletList'), command: () => e.chain().focus().toggleBulletList().run() },
     { label: 'Ordered List', icon: 'OL', isActive: () => e.isActive('orderedList'), command: () => e.chain().focus().toggleOrderedList().run() },
-    { label: 'Blockquote', icon: 'BQ', isActive: () => e.isActive('blockquote'), command: () => e.chain().focus().toggleBlockquote().run() },
-    { label: 'Code', icon: 'CD', isActive: () => e.isActive('codeBlock'), command: () => e.chain().focus().toggleCodeBlock().run() },
-    { label: 'Horizontal Rule', icon: 'HR', isActive: () => false, command: () => e.chain().focus().setHorizontalRule().run() },
+    { label: 'Blockquote', icon: '"', isActive: () => e.isActive('blockquote'), command: () => e.chain().focus().toggleBlockquote().run() },
+    { label: 'Code', icon: '<>', isActive: () => e.isActive('codeBlock'), command: () => e.chain().focus().toggleCodeBlock().run() },
+    { label: 'Horizontal Rule', icon: '---', isActive: () => false, command: () => e.chain().focus().setHorizontalRule().run() },
   ]
 })
 
