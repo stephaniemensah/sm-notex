@@ -5815,6 +5815,11 @@ tinyglobby@^0.2.11, tinyglobby@^0.2.15, tinyglobby@^0.2.16, tinyglobby@^0.2.17:
     fdir "^6.5.0"
     picomatch "^4.0.4"
 
+tiptap-extension-resize-image@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/tiptap-extension-resize-image/-/tiptap-extension-resize-image-1.4.3.tgz#b8834a218e78d2b3663a56742f6f0fbd8d264aec"
+  integrity sha512-OfYgSCIdRgqvGKnNW1wd84AxryMyBTnI827iOYfkMUywORPxIQGG0QBUIanWeR5b6CJD2fmGE9aTVVvSt99y4w==
+
 to-regex-range@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/to-regex-range/-/to-regex-range-5.0.1.tgz#1648c44aae7c8d988a326018ed72f5b4dd0392e4"

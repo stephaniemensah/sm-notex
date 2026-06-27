@@ -1,75 +1,36 @@
-# Nuxt Minimal Starter
+# SM Notex
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern note-taking application built with Nuxt 3. All your notes are stored locally in your browser.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+- Rich text editor with formatting tools
+- Folder organization with custom icons and colors
+- Tags for better categorization
+- Search functionality
+- User profile management
+- All data stored locally (no server needed)
+
+## Getting Started
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
+# Install dependencies
 yarn install
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
+# Start dev server
 yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Visit `http://localhost:3000`
 
-Build the application for production:
+## Tech Stack
 
-```bash
-# npm
-npm run build
+- Nuxt 3
+- TipTap Editor
+- Tailwind CSS
+- TypeScript
+- localStorage
 
-# pnpm
-pnpm build
+## License
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+MIT
