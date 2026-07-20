@@ -1,53 +1,54 @@
 <template>
   <Teleport to="body">
-    <div
-      v-if="show"
-      class="fixed inset-0 z-50 flex items-end justify-center"
-      @click.self="$emit('close')"
-    >
-      <div class="absolute inset-0 bg-black/40 transition-opacity" @click="$emit('close')"></div>
-
+    <Transition name="fade">
       <div
-        ref="sheetRef"
-        class="relative bg-white/90 backdrop-blur-2xl w-full max-w-lg rounded-t-3xl z-10 touch-pan-y"
-        :class="{ 'transition-transform duration-300': !isDragging }"
-        :style="isDragging ? { transform: `translateY(${dragY}px)` } : {}"
-        @touchstart.passive="onTouchStart"
-        @touchmove.passive="onTouchMove"
-        @touchend="onTouchEnd"
+        v-if="show"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+        @click.self="$emit('close')"
       >
-        <!-- Drag handle -->
-        <div class="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing" @mousedown="onDragStart">
-          <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
-        </div>
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-[2px]" @click="$emit('close')"></div>
 
-        <!-- Title -->
-        <div v-if="title" class="flex items-center justify-between px-5 pb-3">
-          <h3 class="text-[17px] font-semibold text-gray-900">{{ title }}</h3>
-          <button
-            class="w-7 h-7 flex items-center justify-center rounded-full bg-black/[0.04] active:bg-black/[0.08] transition-colors"
-            @click="$emit('close')"
-          >
-            <UiIcon name="close" class="!w-4 !h-4 text-gray-500" />
-          </button>
-        </div>
+        <div
+          ref="sheetRef"
+          class="relative bg-white w-full sm:max-w-md rounded-t-[20px] sm:rounded-[20px] z-10 touch-pan-y shadow-[0_-4px_24px_rgba(0,0,0,0.08)]"
+          :class="{ 'transition-transform duration-300 ease-out': !isDragging }"
+          :style="isDragging ? { transform: `translateY(${dragY}px)` } : {}"
+          @touchstart.passive="onTouchStart"
+          @touchmove.passive="onTouchMove"
+          @touchend="onTouchEnd"
+        >
+          <div class="flex justify-center pt-3 pb-1 sm:hidden">
+            <div class="w-9 h-[3px] bg-[#D6D3D1] rounded-full"></div>
+          </div>
 
-        <!-- Content -->
-        <div class="px-5 pb-8 max-h-[70vh] overflow-y-auto">
-          <slot />
+          <div v-if="title" class="flex items-center justify-between px-5 pt-4 pb-3">
+            <h3 class="text-[15px] font-semibold text-[#1C1917]">{{ title }}</h3>
+            <button
+              class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#F5F5F4] transition-colors"
+              @click="$emit('close')"
+            >
+              <svg class="w-3.5 h-3.5 text-[#78716C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="px-5 pb-6 max-h-[70vh] overflow-y-auto">
+            <slot />
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   show: boolean
   title?: string
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   close: []
 }>()
 
@@ -55,10 +56,6 @@ const sheetRef = ref<HTMLElement | null>(null)
 const isDragging = ref(false)
 const dragY = ref(0)
 const startY = ref(0)
-
-function close() {
-  emit('close')
-}
 
 function onTouchStart(e: TouchEvent) {
   if (!e.touches[0]) return
@@ -69,49 +66,17 @@ function onTouchStart(e: TouchEvent) {
 function onTouchMove(e: TouchEvent) {
   if (!e.touches[0]) return
   const delta = e.touches[0].clientY - startY.value
-  if (delta > 0) {
-    dragY.value = delta
-  }
+  if (delta > 0) dragY.value = delta
 }
 
 function onTouchEnd() {
   isDragging.value = false
-  if (dragY.value > 100) {
+  if (dragY.value > 120) {
     dragY.value = 0
-    close()
+    const emit = defineEmits<{ close: [] }>()
+    emit('close')
   } else {
     dragY.value = 0
   }
 }
-
-function onDragStart(e: MouseEvent) {
-  startY.value = e.clientY
-  isDragging.value = true
-  document.addEventListener('mousemove', onDragMove)
-  document.addEventListener('mouseup', onDragEnd)
-}
-
-function onDragMove(e: MouseEvent) {
-  const delta = e.clientY - startY.value
-  if (delta > 0) {
-    dragY.value = delta
-  }
-}
-
-function onDragEnd() {
-  isDragging.value = false
-  document.removeEventListener('mousemove', onDragMove)
-  document.removeEventListener('mouseup', onDragEnd)
-  if (dragY.value > 100) {
-    dragY.value = 0
-    close()
-  } else {
-    dragY.value = 0
-  }
-}
-
-onBeforeUnmount(() => {
-  document.removeEventListener('mousemove', onDragMove)
-  document.removeEventListener('mouseup', onDragEnd)
-})
 </script>

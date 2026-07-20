@@ -1,108 +1,117 @@
 <template>
-  <div class="h-screen flex flex-col bg-[#f2f2f7]">
+  <div class="h-screen flex flex-col bg-white">
     <!-- Top bar -->
-    <div class="flex items-center justify-between px-3 py-2 border-b border-black/[0.06] bg-white/70 backdrop-blur-xl flex-shrink-0">
-      <UiButton variant="ghost" size="xs" @click="router.back()">
-        <UiIcon name="back" />
-        <span class="text-[14px]">Back</span>
-      </UiButton>
-
-      <UiButton
-        v-if="noteId"
-        variant="ghost"
-        size="xs"
-        class="text-red-500"
-        @click="handleDelete"
+    <div class="flex items-center justify-between px-4 h-14 border-b border-[#F5F5F4] flex-shrink-0">
+      <button
+        class="flex items-center gap-1 text-[#78716C] hover:text-[#1C1917] transition-colors active:scale-95"
+        @click="router.back()"
       >
-        Delete
-      </UiButton>
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+        <span class="text-[13px] font-medium">Back</span>
+      </button>
+
+      <div class="flex items-center gap-2">
+        <span v-if="saveStatus" class="text-[10px] text-[#A8A29E] font-medium transition-opacity" :class="saveStatus === 'Saving...' ? 'opacity-100' : 'opacity-60'">
+          {{ saveStatus }}
+        </span>
+        <button
+          v-if="noteId"
+          class="w-8 h-8 rounded-lg flex items-center justify-center text-[#DC2626] hover:bg-[#FEF2F2] transition-all active:scale-95"
+          @click="showDeleteConfirm = true"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Body -->
-    <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
-      <!-- Title -->
-      <div class="px-4 pt-4 pb-2 flex-shrink-0">
+    <div class="flex-1 flex flex-col min-h-0 overflow-y-auto">
+      <div class="max-w-2xl mx-auto w-full px-6 py-8">
+        <!-- Title -->
         <input
           v-model="title"
           type="text"
-          placeholder="Title"
-          class="w-full text-[24px] font-bold text-gray-900 border-none outline-none placeholder-gray-300 bg-transparent leading-tight"
+          placeholder="Untitled"
+          class="w-full text-[28px] font-bold text-[#1C1917] border-none outline-none placeholder-[#D6D3D1] bg-transparent leading-tight tracking-tight mb-6"
           @input="debouncedSave"
         />
-      </div>
 
-      <!-- Meta row -->
-      <div class="px-4 pb-3 space-y-1 border-b border-black/[0.06]">
-        <div class="flex items-center gap-2 text-[12px]">
-          <span class="text-gray-400 w-24">Created by</span>
-          <div class="flex items-center gap-1">
+        <!-- Meta -->
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[#A8A29E] mb-8 pb-6 border-b border-[#F5F5F4]">
+          <div class="flex items-center gap-1.5">
             <UiAvatar :name="user.name" :image-url="user.avatar" size="xs" />
-            <span class="text-gray-900 font-medium">{{ user.name }}</span>
+            <span class="font-medium text-[#78716C]">{{ user.name }}</span>
           </div>
-        </div>
-        <div class="flex items-center gap-2 text-[12px]">
-          <span class="text-gray-400 w-24">Last Modified</span>
-          <span class="text-gray-600">{{ formatDate(updatedAt) }}</span>
-        </div>
+          <span>{{ formatDate(updatedAt) }}</span>
 
-        <!-- Tags row -->
-        <div class="flex items-start gap-2 text-[12px] pt-1">
-          <span class="text-gray-400 w-24 pt-0.5">Tags</span>
-          <div class="flex flex-wrap gap-1 flex-1">
-            <UiBadge
-              v-for="(tag, i) in tags"
-              :key="i"
-              variant="dark"
-            >
-              {{ tag }}
-              <button @click="removeTag(i)" class="ml-0.5 hover:text-red-300 transition-colors">
-                <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </UiBadge>
-            <button
-              v-if="!showTagInput"
-              @click="openTagInput"
-              class="inline-flex items-center gap-0.5 text-[11px] px-2 py-0.5 bg-black/[0.04] text-gray-500 rounded-md hover:bg-black/[0.06] transition-colors border border-black/[0.04]"
-            >
-              <UiIcon name="plus" class="!w-3 !h-3" />
-              Add
-            </button>
-            <input
-              v-else
-              v-model="newTag"
-              ref="tagInput"
-              type="text"
-              placeholder="Tag..."
-              class="text-[11px] px-2 py-0.5 bg-black/[0.03] rounded-md border border-black/[0.06] outline-none focus:border-blue-400 w-20"
-              @keyup.enter="addTag"
-              @keyup.escape="cancelTagInput"
-              @blur="addTag"
-            />
-          </div>
-        </div>
-
-        <!-- Folder row -->
-        <div class="flex items-center gap-2 text-[12px] pt-1">
-          <span class="text-gray-400 w-24">Folder</span>
+          <!-- Folder select -->
           <select
             v-model="selectedFolder"
             @change="debouncedSave"
-            class="flex-1 bg-transparent text-gray-900 border-none outline-none text-[12px] cursor-pointer"
+            class="bg-[#F5F5F4] text-[#78716C] rounded-lg px-2 py-1 border-none outline-none text-[11px] font-medium cursor-pointer"
           >
-            <option :value="null">Uncategorized</option>
+            <option :value="null">No folder</option>
             <option v-for="f in folders" :key="f.id" :value="f.id">{{ f.name }}</option>
           </select>
         </div>
-      </div>
 
-      <!-- Rich text editor -->
-      <RichTextEditor
-        :initial-content="content"
-        @update="handleContentUpdate"
-      />
+        <!-- Tags -->
+        <div class="flex flex-wrap items-center gap-1.5 mb-8">
+          <span
+            v-for="(tag, i) in tags"
+            :key="i"
+            class="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#F5F5F4] text-[#78716C]"
+          >
+            {{ tag }}
+            <button @click="removeTag(i)" class="hover:text-[#DC2626] transition-colors ml-0.5">
+              <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </span>
+          <button
+            v-if="!showTagInput"
+            @click="openTagInput"
+            class="inline-flex items-center gap-0.5 text-[10px] font-medium px-2 py-0.5 rounded-md border border-dashed border-[#E7E5E4] text-[#A8A29E] hover:border-[#D6D3D1] hover:text-[#78716C] transition-colors"
+          >
+            <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add tag
+          </button>
+          <input
+            v-else
+            v-model="newTag"
+            ref="tagInput"
+            type="text"
+            placeholder="Tag..."
+            class="text-[10px] px-2 py-0.5 rounded-md border border-[#E7E5E4] outline-none focus:border-[#7C3AED] w-20 font-medium"
+            @keyup.enter="addTag"
+            @keyup.escape="cancelTagInput"
+            @blur="addTag"
+          />
+        </div>
+
+        <!-- Editor -->
+        <RichTextEditor
+          :initial-content="content"
+          @update="handleContentUpdate"
+        />
+      </div>
     </div>
+
+    <!-- Delete Confirm -->
+    <UiConfirmDialog
+      :show="showDeleteConfirm"
+      title="Delete note"
+      message="This action cannot be undone. The note will be permanently removed."
+      @confirm="handleDelete"
+      @cancel="showDeleteConfirm = false"
+    />
   </div>
 </template>
 
@@ -127,13 +136,11 @@ const updatedAt = ref(Date.now())
 const createdAt = ref(Date.now())
 const user = ref(getUser())
 const pendingId = ref('')
+const showDeleteConfirm = ref(false)
+const saveStatus = ref('')
 
 onMounted(() => {
-  if (!user.value.name) {
-    router.push('/')
-    return
-  }
-
+  if (!user.value.name) { router.push('/'); return }
   folders.value = getAllFolders()
 
   const folderQuery = route.query.folder as string | undefined
@@ -168,62 +175,39 @@ function openTagInput() {
 
 function addTag() {
   const tag = newTag.value.trim()
-  if (tag && !tags.value.includes(tag)) {
-    tags.value.push(tag)
-    debouncedSave()
-  }
+  if (tag && !tags.value.includes(tag)) { tags.value.push(tag); debouncedSave() }
   newTag.value = ''
   showTagInput.value = false
 }
 
-function cancelTagInput() {
-  newTag.value = ''
-  showTagInput.value = false
-}
+function cancelTagInput() { newTag.value = ''; showTagInput.value = false }
 
-function removeTag(i: number) {
-  tags.value.splice(i, 1)
-  debouncedSave()
-}
+function removeTag(i: number) { tags.value.splice(i, 1); debouncedSave() }
 
-function handleContentUpdate(html: string) {
-  content.value = html
-  debouncedSave()
-}
+function handleContentUpdate(html: string) { content.value = html; debouncedSave() }
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null
 function debouncedSave() {
+  saveStatus.value = 'Saving...'
   if (saveTimer) clearTimeout(saveTimer)
-  saveTimer = setTimeout(persistNote, 500)
+  saveTimer = setTimeout(() => { persistNote(); saveStatus.value = 'Saved'; setTimeout(() => { saveStatus.value = '' }, 1500) }, 500)
 }
 
 function persistNote() {
   const id = noteId.value || pendingId.value || (pendingId.value = createId())
   const now = Date.now()
-
   const note: Note = {
-    id,
-    title: title.value,
-    content: content.value,
-    tags: [...tags.value],
-    folderId: selectedFolder.value,
-    createdAt: noteId.value ? createdAt.value : now,
-    updatedAt: now,
-    createdBy: user.value.name,
+    id, title: title.value, content: content.value, tags: [...tags.value],
+    folderId: selectedFolder.value, createdAt: noteId.value ? createdAt.value : now,
+    updatedAt: now, createdBy: user.value.name,
   }
-
   save(note)
   updatedAt.value = now
-
-  if (!noteId.value) {
-    router.replace(`/editor/${id}`)
-  }
+  if (!noteId.value) router.replace(`/editor/${id}`)
 }
 
 function handleDelete() {
-  if (noteId.value && confirm('Delete this note?')) {
-    remove(noteId.value)
-    router.push('/notes')
-  }
+  if (noteId.value) { remove(noteId.value); router.push('/notes') }
+  showDeleteConfirm.value = false
 }
 </script>

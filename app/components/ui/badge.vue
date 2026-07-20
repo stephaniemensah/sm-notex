@@ -2,26 +2,49 @@
   <span
     :class="[
       'inline-flex items-center gap-1 font-medium rounded-full',
-      variant === 'colored'
-        ? ''
-        : variant === 'dark'
-          ? 'bg-gray-900/90 text-white px-2 py-0.5 text-[11px]'
-          : variant === 'glass'
-            ? 'bg-black/[0.04] text-gray-600 px-2 py-0.5 text-[11px] border border-black/[0.04]'
-            : 'bg-black/[0.04] text-gray-500 px-2 py-0.5 text-[11px]',
+      sizeClass,
+      variantClass,
     ]"
-    :style="variant === 'colored' ? { backgroundColor: color + '18', color: color, padding: '2px 8px', fontSize: '11px' } : undefined"
   >
     <slot />
   </span>
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
-  variant?: 'default' | 'colored' | 'dark' | 'glass'
+const props = withDefaults(defineProps<{
+  variant?: 'default' | 'colored' | 'dark' | 'outline'
   color?: string
+  size?: 'sm' | 'md'
 }>(), {
   variant: 'default',
-  color: '#3B82F6',
+  color: '#7C3AED',
+  size: 'sm',
+})
+
+const sizeClass = computed(() => {
+  return props.size === 'sm' ? 'text-[10px] px-2 py-0.5' : 'text-[11px] px-2.5 py-1'
+})
+
+const variantClass = computed(() => {
+  switch (props.variant) {
+    case 'dark':
+      return 'bg-[#1C1917] text-white'
+    case 'colored':
+      return ''
+    case 'outline':
+      return 'border border-[#E7E5E4] text-[#78716C]'
+    default:
+      return 'bg-[#F5F5F4] text-[#78716C]'
+  }
+})
+
+const dynamicStyle = computed(() => {
+  if (props.variant === 'colored') {
+    return {
+      backgroundColor: props.color + '14',
+      color: props.color,
+    }
+  }
+  return undefined
 })
 </script>
