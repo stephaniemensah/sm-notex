@@ -28,13 +28,13 @@ const sizeClass = computed(() => {
 const variantClass = computed(() => {
   switch (props.variant) {
     case 'dark':
-      return 'bg-[#1C1917] text-white'
+      return 'bg-gradient-to-r from-pink-400 to-rose-400 text-white'
     case 'colored':
       return ''
     case 'outline':
-      return 'border border-[#E7E5E4] text-[#78716C]'
+      return 'border border-pink-200 text-pink-500'
     default:
-      return 'bg-[#F5F5F4] text-[#78716C]'
+      return 'bg-white/50 backdrop-blur-sm text-pink-500 border border-white/30'
   }
 })
 

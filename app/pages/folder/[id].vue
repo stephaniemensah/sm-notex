@@ -1,68 +1,57 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAF9]">
-    <div class="max-w-lg mx-auto px-5 pt-12 pb-28">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
+  <div class="min-h-screen">
+    <!-- Top bar -->
+    <UiTopBar back-to="/notes">
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
+        :class="showSearch ? 'bg-gradient-to-r from-pink-400 to-rose-400 text-white' : 'bg-white/50 backdrop-blur-sm text-pink-400 hover:bg-white/70 border border-white/30'"
+        @click="toggleSearch"
+      >
+        <svg v-if="!showSearch" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="relative" ref="menuRef">
         <button
-          class="flex items-center gap-1 text-[#78716C] hover:text-[#1C1917] transition-colors"
-          @click="router.push('/notes')"
+          class="w-8 h-8 rounded-lg bg-white/50 backdrop-blur-sm flex items-center justify-center text-pink-400 hover:bg-white/70 transition-all border border-white/30"
+          @click.stop="showMenu = !showMenu"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
           </svg>
-          <span class="text-[13px] font-medium">Back</span>
         </button>
-        <div class="flex items-center gap-2">
-          <button
-            class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150"
-            :class="showSearch ? 'bg-[#1C1917] text-white' : 'bg-[#F5F5F4] text-[#78716C] hover:bg-[#E7E5E4]'"
-            @click="toggleSearch"
+        <Transition name="scale">
+          <div
+            v-if="showMenu"
+            class="absolute top-full right-0 mt-2 bg-white/60 backdrop-blur-xl rounded-xl border border-white/50 py-1 w-40 z-20 shadow-[0_4px_16px_rgba(244,114,182,0.15)]"
           >
-            <svg v-if="!showSearch" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-            <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <div class="relative" ref="menuRef">
             <button
-              class="w-8 h-8 rounded-lg bg-[#F5F5F4] flex items-center justify-center text-[#78716C] hover:bg-[#E7E5E4] transition-all"
-              @click.stop="showMenu = !showMenu"
+              class="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-pink-600 hover:bg-pink-50 transition-colors"
+              @click="openEditModal"
+            >
+              <svg class="w-4 h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              Edit folder
+            </button>
+            <button
+              class="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-pink-500 hover:bg-pink-50 transition-colors"
+              @click="deleteFolder"
             >
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
               </svg>
+              Delete folder
             </button>
-            <Transition name="scale">
-              <div
-                v-if="showMenu"
-                class="absolute top-full right-0 mt-2 bg-white rounded-xl border border-[#E7E5E4] py-1 w-40 z-20 shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
-              >
-                <button
-                  class="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-[#1C1917] hover:bg-[#F5F5F4] transition-colors"
-                  @click="openEditModal"
-                >
-                  <svg class="w-4 h-4 text-[#78716C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                  </svg>
-                  Edit folder
-                </button>
-                <button
-                  class="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
-                  @click="deleteFolder"
-                >
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                  </svg>
-                  Delete folder
-                </button>
-              </div>
-            </Transition>
           </div>
-        </div>
+        </Transition>
       </div>
+    </UiTopBar>
 
+    <div class="max-w-lg mx-auto px-5 pt-6 pb-28">
       <!-- Search -->
       <div v-if="showSearch" class="mb-5">
         <UiSearchInput v-model="searchQuery" placeholder="Search in folder..." ref="searchInput" />
@@ -79,7 +68,7 @@
           </div>
           <div>
             <h1 class="text-[22px] font-bold text-[#1C1917] tracking-tight">{{ folder.name }}</h1>
-            <p class="text-[12px] text-[#A8A29E] mt-0.5">{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</p>
+            <p class="text-[12px] text-pink-400 mt-0.5">{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</p>
           </div>
         </div>
       </div>
@@ -124,7 +113,7 @@
               @click="editForm.icon = icon"
               :class="[
                 'w-10 h-10 rounded-xl flex items-center justify-center p-2 transition-all duration-150',
-                editForm.icon === icon ? 'bg-[#1C1917] text-white shadow-md' : 'bg-[#F5F5F4] text-[#78716C] hover:bg-[#E7E5E4]'
+                editForm.icon === icon ? 'bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-md' : 'bg-white/50 text-pink-400 hover:bg-white/70'
               ]"
             >
               <FolderIcon :name="icon" />
@@ -133,13 +122,13 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-[#78716C] uppercase tracking-wider mb-2">Color</label>
+          <label class="block text-[11px] font-semibold text-pink-400 uppercase tracking-wider mb-2">Color</label>
           <div class="flex gap-2">
             <button
               v-for="color in availableColors"
               :key="color"
               @click="editForm.color = color"
-              :class="['w-8 h-8 rounded-lg transition-all', editForm.color === color ? 'ring-2 ring-offset-2 ring-[#1C1917] scale-110' : 'hover:scale-105']"
+              :class="['w-8 h-8 rounded-lg transition-all', editForm.color === color ? 'ring-2 ring-offset-2 ring-pink-400 scale-110' : 'hover:scale-105']"
               :style="{ backgroundColor: color }"
             />
           </div>

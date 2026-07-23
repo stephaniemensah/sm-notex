@@ -6,11 +6,11 @@
         class="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
         @click.self="$emit('close')"
       >
-        <div class="absolute inset-0 bg-black/30 backdrop-blur-[2px]" @click="$emit('close')"></div>
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-[4px]" @click="$emit('close')"></div>
 
         <div
           ref="sheetRef"
-          class="relative bg-white w-full sm:max-w-md rounded-t-[20px] sm:rounded-[20px] z-10 touch-pan-y shadow-[0_-4px_24px_rgba(0,0,0,0.08)]"
+          class="relative bg-white/70 backdrop-blur-xl w-full sm:max-w-md rounded-t-[20px] sm:rounded-[20px] z-10 touch-pan-y shadow-[0_-4px_24px_rgba(244,114,182,0.15)] border border-white/50"
           :class="{ 'transition-transform duration-300 ease-out': !isDragging }"
           :style="isDragging ? { transform: `translateY(${dragY}px)` } : {}"
           @touchstart.passive="onTouchStart"
@@ -18,16 +18,16 @@
           @touchend="onTouchEnd"
         >
           <div class="flex justify-center pt-3 pb-1 sm:hidden">
-            <div class="w-9 h-[3px] bg-[#D6D3D1] rounded-full"></div>
+            <div class="w-9 h-[3px] bg-pink-200 rounded-full"></div>
           </div>
 
           <div v-if="title" class="flex items-center justify-between px-5 pt-4 pb-3">
             <h3 class="text-[15px] font-semibold text-[#1C1917]">{{ title }}</h3>
             <button
-              class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#F5F5F4] transition-colors"
+              class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-pink-100 transition-colors"
               @click="$emit('close')"
             >
-              <svg class="w-3.5 h-3.5 text-[#78716C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <svg class="w-3.5 h-3.5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>

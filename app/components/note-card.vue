@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="to"
-    class="group block rounded-2xl border border-[#E7E5E4] bg-white overflow-hidden transition-all duration-200 hover:border-[#D6D3D1] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] active:scale-[0.98]"
+    class="group block rounded-2xl border border-white/50 bg-white/50 backdrop-blur-sm overflow-hidden transition-all duration-200 hover:border-pink-200 hover:bg-white/70 hover:shadow-[0_4px_16px_rgba(244,114,182,0.1)] active:scale-[0.98]"
     :style="{ borderTopColor: accentColor + '40' }"
   >
     <div class="p-4">
@@ -12,19 +12,19 @@
       <div class="h-[60px] overflow-hidden mb-3">
         <div
           v-if="content"
-          class="text-[11px] text-[#A8A29E] leading-relaxed line-clamp-3 [&_img]:hidden"
+          class="text-[11px] text-pink-400/70 leading-relaxed line-clamp-3 [&_img]:hidden"
           v-html="content"
         ></div>
-        <p v-else class="text-[11px] text-[#D6D3D1] italic">Empty note</p>
+        <p v-else class="text-[11px] text-pink-300 italic">Empty note</p>
       </div>
 
       <div class="flex items-center justify-between">
-        <p class="text-[10px] text-[#D6D3D1] font-medium">{{ formattedDate }}</p>
+        <p class="text-[10px] text-pink-300 font-medium">{{ formattedDate }}</p>
         <div v-if="tags && tags.length > 0" class="flex gap-1">
           <span
             v-for="tag in tags.slice(0, 2)"
             :key="tag"
-            class="text-[9px] px-1.5 py-0.5 rounded-md bg-[#F5F5F4] text-[#78716C] font-medium"
+            class="text-[9px] px-1.5 py-0.5 rounded-md bg-white/50 backdrop-blur-sm text-pink-400 font-medium border border-white/30"
           >{{ tag }}</span>
         </div>
       </div>

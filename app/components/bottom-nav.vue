@@ -1,9 +1,9 @@
 <template>
-  <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-[#F5F5F4] z-40 safe-area-bottom">
+  <nav class="fixed bottom-0 left-0 right-0 bg-white/50 backdrop-blur-xl border-t border-white/30 z-40 safe-area-bottom">
     <div class="max-w-lg mx-auto flex items-center justify-around h-[68px] px-6">
       <button
         class="flex flex-col items-center justify-center gap-1 w-14 py-1 transition-all duration-150"
-        :class="active === 'home' ? 'text-[#1C1917]' : 'text-[#D6D3D1] hover:text-[#A8A29E]'"
+        :class="active === 'home' ? 'text-pink-600' : 'text-pink-300 hover:text-pink-400'"
         @click="navigate('/notes')"
       >
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" :stroke-width="active === 'home' ? 2.5 : 2">
@@ -16,7 +16,7 @@
         class="flex flex-col items-center justify-center -mt-5"
         @click="$emit('add')"
       >
-        <div class="w-12 h-12 rounded-2xl bg-[#1C1917] flex items-center justify-center shadow-[0_4px_12px_rgba(28,25,23,0.25)] active:scale-90 transition-transform duration-150">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-400 via-rose-400 to-fuchsia-500 flex items-center justify-center shadow-[0_4px_16px_rgba(244,114,182,0.35)] active:scale-90 transition-transform duration-150">
           <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
@@ -25,7 +25,7 @@
 
       <button
         class="flex flex-col items-center justify-center gap-1 w-14 py-1 transition-all duration-150"
-        :class="active === 'profile' ? 'text-[#1C1917]' : 'text-[#D6D3D1] hover:text-[#A8A29E]'"
+        :class="active === 'profile' ? 'text-pink-600' : 'text-pink-300 hover:text-pink-400'"
         @click="$emit('profile')"
       >
         <UiAvatar :name="userName" :image-url="userAvatar" size="sm" class="!w-6 !h-6" />

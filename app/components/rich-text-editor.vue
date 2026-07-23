@@ -2,23 +2,23 @@
   <div class="flex flex-col flex-1 min-h-0">
     <div v-if="editor" class="flex-shrink-0 mb-4">
       <!-- Toolbar -->
-      <div class="flex items-center gap-0.5 p-1 bg-[#F5F5F4] rounded-xl overflow-x-auto">
+      <div class="flex items-center gap-0.5 p-1 bg-white/50 backdrop-blur-sm rounded-xl overflow-x-auto border border-white/30">
         <button
           v-for="action in formattingActions"
           :key="action.label"
           :title="action.label"
           class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-semibold transition-all duration-100 active:scale-90"
-          :class="action.isActive?.() ? 'bg-white text-[#1C1917] shadow-[0_1px_2px_rgba(0,0,0,0.06)]' : 'text-[#78716C] hover:bg-white/60'"
+          :class="action.isActive?.() ? 'bg-pink-50 text-pink-600 shadow-[0_1px_2px_rgba(244,114,182,0.15)]' : 'text-pink-400 hover:bg-pink-50/60'"
           @click="action.command"
         >
           {{ action.icon }}
         </button>
 
-        <div class="w-px h-5 bg-[#E7E5E4] mx-1 flex-shrink-0"></div>
+        <div class="w-px h-5 bg-pink-200 mx-1 flex-shrink-0"></div>
 
         <button
           title="Insert Link"
-          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[#78716C] hover:bg-white/60 transition-all duration-100"
+          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-pink-400 hover:bg-pink-50/60 transition-all duration-100"
           @click="insertLink"
         >
           <UiIcon name="link" class="!w-4 !h-4" />
@@ -26,7 +26,7 @@
 
         <button
           title="Insert Image"
-          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[#78716C] hover:bg-white/60 transition-all duration-100"
+          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-pink-400 hover:bg-pink-50/60 transition-all duration-100"
           @click="showImageModal = true"
         >
           <UiIcon name="image" class="!w-4 !h-4" />
@@ -34,7 +34,7 @@
 
         <button
           title="Embed YouTube"
-          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-[#78716C] hover:bg-white/60 transition-all duration-100"
+          class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-pink-400 hover:bg-pink-50/60 transition-all duration-100"
           @click="insertYoutube"
         >
           <UiIcon name="youtube" class="!w-4 !h-4" />
@@ -44,7 +44,7 @@
 
         <button
           title="AI Assistant"
-          class="flex-shrink-0 h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 text-[11px] font-semibold bg-gradient-to-r from-violet-500 to-purple-500 text-white active:scale-95 transition-all duration-100 shadow-[0_1px_3px_rgba(124,58,237,0.25)]"
+          class="flex-shrink-0 h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 text-[11px] font-semibold bg-gradient-to-r from-pink-400 via-rose-400 to-fuchsia-500 text-white active:scale-95 transition-all duration-100 shadow-[0_1px_3px_rgba(244,114,182,0.25)]"
           @click="handleAi"
         >
           <UiIcon name="sparkles" class="!w-3.5 !h-3.5" />
@@ -58,13 +58,13 @@
     <!-- Image Modal -->
     <UiModal :show="showImageModal" title="Insert image" @close="showImageModal = false">
       <div class="space-y-4">
-        <label class="flex items-center gap-3 p-3.5 rounded-xl border border-[#E7E5E4] cursor-pointer hover:bg-[#F5F5F4] transition-colors">
-          <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-            <UiIcon name="camera" class="!w-5 !h-5 text-violet-500" />
+        <label class="flex items-center gap-3 p-3.5 rounded-xl border border-white/50 cursor-pointer hover:bg-white/50 transition-colors">
+          <div class="w-10 h-10 rounded-xl bg-white/60 flex items-center justify-center flex-shrink-0">
+            <UiIcon name="camera" class="!w-5 !h-5 text-pink-400" />
           </div>
           <div>
             <p class="text-[13px] font-medium text-[#1C1917]">Upload from device</p>
-            <p class="text-[11px] text-[#A8A29E]">JPG, PNG, GIF</p>
+            <p class="text-[11px] text-pink-400/70">JPG, PNG, GIF</p>
           </div>
           <input type="file" accept="image/*" class="hidden" @change="handleFileUpload" />
         </label>
@@ -76,7 +76,7 @@
               v-model="imageUrl"
               type="url"
               placeholder="https://..."
-              class="flex-1 h-9 px-3 rounded-lg bg-[#F5F5F4] border border-transparent text-[13px] text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#E7E5E4] focus:bg-white transition-all"
+              class="flex-1 h-9 px-3 rounded-lg bg-white/50 backdrop-blur-sm border border-white/50 text-[13px] text-[#1C1917] placeholder-pink-300 outline-none focus:border-pink-300 focus:bg-white/70 transition-all"
               @keyup.enter="insertImageFromUrl"
             />
             <UiButton size="sm" :disabled="!imageUrl.trim()" @click="insertImageFromUrl">
@@ -91,12 +91,12 @@
     <UiModal :show="showAiModal" title="AI Assistant" @close="closeAiModal">
       <div class="space-y-4">
         <div v-if="!aiResult">
-          <p class="text-[12px] text-[#78716C] mb-3">What would you like help with?</p>
+          <p class="text-[12px] text-pink-400/70 mb-3">What would you like help with?</p>
           <div class="grid grid-cols-2 gap-2">
             <button
               v-for="action in aiActions"
               :key="action"
-              class="p-3 rounded-xl border border-[#E7E5E4] text-left text-[12px] font-medium text-[#1C1917] hover:bg-[#F5F5F4] transition-colors"
+              class="p-3 rounded-xl border border-white/50 text-left text-[12px] font-medium text-[#1C1917] hover:bg-white/50 transition-colors"
               @click="runAiAction(action)"
             >
               {{ action }}
@@ -107,7 +107,7 @@
               v-model="aiPrompt"
               placeholder="Or type your own prompt..."
               rows="3"
-              class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F4] border border-transparent text-[13px] text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#E7E5E4] focus:bg-white transition-all resize-none"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-white/50 backdrop-blur-sm border border-white/50 text-[13px] text-[#1C1917] placeholder-pink-300 outline-none focus:border-pink-300 focus:bg-white/70 transition-all resize-none"
             ></textarea>
             <UiButton
               size="md"
@@ -122,7 +122,7 @@
         </div>
 
         <div v-else>
-          <div class="bg-[#F5F5F4] rounded-xl p-3.5 mb-3 text-[13px] text-[#1C1917] leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">{{ aiResult }}</div>
+          <div class="bg-white/50 backdrop-blur-sm rounded-xl p-3.5 mb-3 text-[13px] text-[#1C1917] leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto border border-white/30">{{ aiResult }}</div>
           <div class="flex gap-2">
             <UiButton variant="secondary" size="md" class="flex-1" @click="aiResult = ''">
               Discard
@@ -264,10 +264,10 @@ onBeforeUnmount(() => { editor.value?.destroy() })
 .tiptap pre code { background: none; padding: 0; }
 .tiptap hr { border: none; border-top: 1px solid #E7E5E4; margin: 1em 0; }
 .tiptap img { max-width: 100%; height: auto; border-radius: 8px; cursor: grab; transition: box-shadow 0.2s; }
-.tiptap img:hover { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2); }
+.tiptap img:hover { box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.2); }
 .tiptap img:active { cursor: grabbing; }
-.tiptap img.ProseMirror-selectednode { outline: 2px solid #7C3AED; outline-offset: 2px; }
-.ProseMirror .resize-handle { position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #7C3AED; border-radius: 50%; cursor: se-resize; border: 2px solid white; z-index: 10; }
-.ProseMirror .resize-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: white; border-radius: 50%; }
+.tiptap img.ProseMirror-selectednode { outline: 2px solid #EC4899; outline-offset: 2px; }
+.ProseMirror .resize-handle { position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #EC4899; border-radius: 50%; cursor: se-resize; border: 2px solid #fce7f3; z-index: 10; }
+.ProseMirror .resize-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: #fce7f3; border-radius: 50%; }
 .ProseMirror img.ProseMirror-selectednode { position: relative; }
 </style>

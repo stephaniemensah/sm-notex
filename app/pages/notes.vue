@@ -1,11 +1,13 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAF9]">
+  <div class="min-h-screen">
     <div class="max-w-lg mx-auto px-5 pt-12 pb-28">
       <!-- Header -->
       <div class="flex items-center justify-between mb-8">
         <div>
-          <p class="text-[11px] text-[#A8A29E] font-medium uppercase tracking-wider mb-1">{{ greeting }}</p>
-          <h1 class="text-[26px] font-bold text-[#1C1917] tracking-tight">My Notes</h1>
+          <p class="text-[11px] text-pink-400 font-medium uppercase tracking-wider mb-1">{{ greeting }}</p>
+          <h1 class="text-[26px] font-bold tracking-tight">
+            <span class="bg-gradient-to-r from-pink-500 via-rose-500 to-fuchsia-500 bg-clip-text text-transparent">My Notes</span>
+          </h1>
         </div>
         <button @click="openProfileModal" class="transition-transform active:scale-95">
           <UiAvatar :name="user.name" :image-url="user.avatar" size="md" />
@@ -18,7 +20,7 @@
       </div>
 
       <!-- Tabs -->
-      <div class="flex gap-1 p-1 bg-[#F5F5F4] rounded-xl mb-6">
+      <div class="flex gap-1 p-1 bg-white/50 backdrop-blur-sm rounded-xl mb-6 border border-white/30">
         <button
           v-for="tab in tabs"
           :key="tab.id"
@@ -26,8 +28,8 @@
           :class="[
             'flex-1 py-2 text-[12px] font-semibold rounded-lg transition-all duration-200',
             activeTab === tab.id
-              ? 'bg-white text-[#1C1917] shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
-              : 'text-[#78716C] hover:text-[#1C1917]'
+              ? 'bg-white/80 text-pink-600 shadow-[0_2px_8px_rgba(244,114,182,0.15)]'
+              : 'text-pink-400 hover:text-pink-600'
           ]"
         >
           {{ tab.label }}
@@ -103,19 +105,19 @@
         />
 
         <div>
-          <label class="block text-[11px] font-semibold text-[#78716C] uppercase tracking-wider mb-2">Icon</label>
+          <label class="block text-[11px] font-semibold text-pink-400 uppercase tracking-wider mb-2">Icon</label>
           <div class="grid grid-cols-6 gap-1.5">
             <button
               v-for="icon in availableIcons"
               :key="icon"
               type="button"
               @click="newFolder.icon = icon"
-              :class="[
-                'w-10 h-10 rounded-xl flex items-center justify-center p-2 transition-all duration-150',
-                newFolder.icon === icon
-                  ? 'bg-[#1C1917] text-white shadow-md'
-                  : 'bg-[#F5F5F4] text-[#78716C] hover:bg-[#E7E5E4]'
-              ]"
+                :class="[
+                  'w-10 h-10 rounded-xl flex items-center justify-center p-2 transition-all duration-150',
+                  newFolder.icon === icon
+                    ? 'bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-md'
+                    : 'bg-white/50 backdrop-blur-sm text-pink-400 hover:bg-white/70'
+                ]"
             >
               <FolderIcon :name="icon" />
             </button>
@@ -123,7 +125,7 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-[#78716C] uppercase tracking-wider mb-2">Color</label>
+          <label class="block text-[11px] font-semibold text-pink-400 uppercase tracking-wider mb-2">Color</label>
           <div class="flex gap-2">
             <button
               v-for="color in availableColors"
@@ -131,7 +133,7 @@
               @click="newFolder.color = color"
               :class="[
                 'w-8 h-8 rounded-lg transition-all duration-150',
-                newFolder.color === color ? 'ring-2 ring-offset-2 ring-[#1C1917] scale-110' : 'hover:scale-105'
+                newFolder.color === color ? 'ring-2 ring-offset-2 ring-pink-400 scale-110' : 'hover:scale-105'
               ]"
               :style="{ backgroundColor: color }"
             ></button>
@@ -159,7 +161,7 @@
               :image-url="editedAvatarDataUrl || user.avatar || undefined"
               size="xl"
             />
-            <label class="absolute -bottom-1 -right-1 w-8 h-8 bg-[#1C1917] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#292524] transition-colors shadow-lg ring-2 ring-white">
+            <label class="absolute -bottom-1 -right-1 w-8 h-8 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full flex items-center justify-center cursor-pointer hover:from-pink-500 hover:to-rose-500 transition-all shadow-lg ring-2 ring-white">
               <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
@@ -194,7 +196,7 @@
 
         <button
           type="button"
-          class="w-full flex items-center justify-center gap-2 py-2.5 text-[12px] font-medium text-[#DC2626] hover:bg-[#FEF2F2] rounded-xl transition-colors mt-1"
+          class="w-full flex items-center justify-center gap-2 py-2.5 text-[12px] font-medium text-pink-500 hover:bg-pink-50 rounded-xl transition-colors mt-1"
           @click="handleLogout"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -229,11 +231,11 @@ const searchQuery = ref('')
 const user = ref(getUser())
 const editedAvatarDataUrl = ref('')
 
-const newFolder = ref({ name: '', icon: 'document', color: '#7C3AED' })
+const newFolder = ref({ name: '', icon: 'document', color: '#EC4899' })
 const editedUser = ref({ name: user.value.name, email: user.value.email || '' })
 
 const availableIcons = ['document', 'check', 'book', 'chart', 'library', 'lightbulb', 'target', 'star', 'fire', 'briefcase', 'palette', 'music']
-const availableColors = ['#7C3AED', '#2563EB', '#059669', '#D97706', '#DC2626', '#DB2777', '#0891B2', '#EA580C']
+const availableColors = ['#EC4899', '#F43F5E', '#D946EF', '#8B5CF6', '#6366F1', '#06B6D4', '#10B981', '#F59E0B']
 
 const greeting = computed(() => {
   const hour = new Date().getHours()
@@ -293,7 +295,7 @@ function createFolder() {
 
 function closeFolderModal() {
   showFolderModal.value = false
-  newFolder.value = { name: '', icon: 'document', color: '#7C3AED' }
+  newFolder.value = { name: '', icon: 'document', color: '#EC4899' }
 }
 
 function openProfileModal() {

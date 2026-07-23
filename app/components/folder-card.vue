@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="to"
-    class="group block rounded-2xl border border-[#E7E5E4] bg-white overflow-hidden transition-all duration-200 hover:border-[#D6D3D1] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] active:scale-[0.98]"
+    class="group block rounded-2xl border border-white/50 bg-white/50 backdrop-blur-sm overflow-hidden transition-all duration-200 hover:border-pink-200 hover:bg-white/70 hover:shadow-[0_4px_16px_rgba(244,114,182,0.1)] active:scale-[0.98]"
   >
     <div class="p-4">
       <div class="flex items-start justify-between mb-2.5">
@@ -13,7 +13,7 @@
           <FolderIcon :name="icon" class="!w-3.5 !h-3.5" />
         </div>
       </div>
-      <p class="text-[11px] text-[#A8A29E]">{{ count }} {{ count === 1 ? 'note' : 'notes' }}</p>
+      <p class="text-[11px] text-pink-400/70">{{ count }} {{ count === 1 ? 'note' : 'notes' }}</p>
     </div>
     <div
       class="h-1 w-full"

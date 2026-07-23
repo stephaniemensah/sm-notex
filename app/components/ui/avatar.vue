@@ -48,12 +48,12 @@ const sizeClass = computed(() => {
 
 const gradientClass = computed(() => {
   const gradients = [
-    'bg-gradient-to-br from-violet-500 to-purple-600',
-    'bg-gradient-to-br from-blue-500 to-indigo-600',
-    'bg-gradient-to-br from-emerald-500 to-teal-600',
-    'bg-gradient-to-br from-amber-500 to-orange-600',
-    'bg-gradient-to-br from-rose-500 to-pink-600',
-    'bg-gradient-to-br from-cyan-500 to-sky-600',
+    'bg-gradient-to-br from-pink-400 to-rose-500',
+    'bg-gradient-to-br from-rose-400 to-pink-500',
+    'bg-gradient-to-br from-fuchsia-400 to-pink-500',
+    'bg-gradient-to-br from-purple-400 to-pink-500',
+    'bg-gradient-to-br from-pink-300 to-rose-400',
+    'bg-gradient-to-br from-rose-300 to-fuchsia-400',
   ]
   let hash = 0
   for (let i = 0; i < props.name.length; i++) {

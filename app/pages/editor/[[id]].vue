@@ -1,32 +1,20 @@
 <template>
-  <div class="h-screen flex flex-col bg-white">
+  <div class="h-screen flex flex-col">
     <!-- Top bar -->
-    <div class="flex items-center justify-between px-4 h-14 border-b border-[#F5F5F4] flex-shrink-0">
+    <UiTopBar>
+      <span v-if="saveStatus" class="text-[10px] text-pink-400 font-medium transition-opacity" :class="saveStatus === 'Saving...' ? 'opacity-100' : 'opacity-60'">
+        {{ saveStatus }}
+      </span>
       <button
-        class="flex items-center gap-1 text-[#78716C] hover:text-[#1C1917] transition-colors active:scale-95"
-        @click="router.back()"
+        v-if="noteId"
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-pink-500 hover:bg-pink-50 transition-all active:scale-95"
+        @click="showDeleteConfirm = true"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
         </svg>
-        <span class="text-[13px] font-medium">Back</span>
       </button>
-
-      <div class="flex items-center gap-2">
-        <span v-if="saveStatus" class="text-[10px] text-[#A8A29E] font-medium transition-opacity" :class="saveStatus === 'Saving...' ? 'opacity-100' : 'opacity-60'">
-          {{ saveStatus }}
-        </span>
-        <button
-          v-if="noteId"
-          class="w-8 h-8 rounded-lg flex items-center justify-center text-[#DC2626] hover:bg-[#FEF2F2] transition-all active:scale-95"
-          @click="showDeleteConfirm = true"
-        >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-          </svg>
-        </button>
-      </div>
-    </div>
+    </UiTopBar>
 
     <!-- Body -->
     <div class="flex-1 flex flex-col min-h-0 overflow-y-auto">
@@ -52,7 +40,7 @@
           <select
             v-model="selectedFolder"
             @change="debouncedSave"
-            class="bg-[#F5F5F4] text-[#78716C] rounded-lg px-2 py-1 border-none outline-none text-[11px] font-medium cursor-pointer"
+            class="bg-white/50 backdrop-blur-sm text-pink-500 rounded-lg px-2 py-1 border border-white/30 outline-none text-[11px] font-medium cursor-pointer"
           >
             <option :value="null">No folder</option>
             <option v-for="f in folders" :key="f.id" :value="f.id">{{ f.name }}</option>
@@ -64,10 +52,10 @@
           <span
             v-for="(tag, i) in tags"
             :key="i"
-            class="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#F5F5F4] text-[#78716C]"
+            class="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-white/50 backdrop-blur-sm text-pink-500 border border-white/30"
           >
             {{ tag }}
-            <button @click="removeTag(i)" class="hover:text-[#DC2626] transition-colors ml-0.5">
+            <button @click="removeTag(i)" class="hover:text-pink-600 transition-colors ml-0.5">
               <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>

@@ -31,14 +31,14 @@ const props = withDefaults(defineProps<{
 })
 
 const classes = computed(() => {
-  const base = 'inline-flex items-center justify-center font-medium transition-all duration-150 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 disabled:opacity-40 disabled:pointer-events-none'
+  const base = 'inline-flex items-center justify-center font-medium transition-all duration-150 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 disabled:opacity-40 disabled:pointer-events-none rounded-2xl'
 
   const variants: Record<string, string> = {
-    primary: 'bg-[#1C1917] text-white hover:bg-[#292524] active:bg-[#1C1917] active:scale-[0.98]',
-    secondary: 'bg-[#F5F5F4] text-[#1C1917] hover:bg-[#E7E5E4] active:bg-[#D6D3D1] active:scale-[0.98]',
-    ghost: 'text-[#78716C] hover:bg-[#F5F5F4] hover:text-[#1C1917] active:bg-[#E7E5E4]',
+    primary: 'bg-gradient-to-r from-pink-400 via-rose-400 to-fuchsia-500 text-white hover:shadow-[0_8px_24px_rgba(244,114,182,0.35)] hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_16px_rgba(244,114,182,0.25)]',
+    secondary: 'bg-pink-50 text-pink-600 hover:bg-pink-100 active:bg-pink-200 active:scale-[0.98]',
+    ghost: 'text-pink-500 hover:bg-pink-50 hover:text-pink-600 active:bg-pink-100',
     danger: 'bg-[#DC2626] text-white hover:bg-[#B91C1C] active:bg-[#991B1B] active:scale-[0.98]',
-    outline: 'border border-[#E7E5E4] text-[#1C1917] hover:bg-[#F5F5F4] active:bg-[#E7E5E4] active:scale-[0.98]',
+    outline: 'border border-pink-200 text-pink-600 hover:bg-pink-50 active:bg-pink-100 active:scale-[0.98]',
   }
 
   const sizes: Record<string, string> = {
